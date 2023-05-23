@@ -1,0 +1,29 @@
+[
+    {
+        "id": "dasdkjasdhkjsahdkjas",
+        "code": "abce123",
+        "title": "producto prueba1",
+        "description": "Este es un producto prueba1",
+        "thumbnail": "sin imagen",
+        "price": 200,
+        "stock": 25
+    },
+    {
+        "id": "dasdsadasdasddswwww2.2s2ssssdads",
+        "code": "abc122",
+        "title": "producto prueba2",
+        "description": "Este es un producto prueba2",
+        "thumbnail": "sin imagen1",
+        "price": 200,
+        "stock": 25
+    },
+    {
+        "id": "dasdsadasdasddswwww2.2s2ssssdads.321312",
+        "code": "abc1333",
+        "title": "TITULO MODIFICADO",
+        "description": "Este es un producto prueba3",
+        "thumbnail": "sin imagen1",
+        "price": 159999,
+        "stock": 35
+    }
+]
