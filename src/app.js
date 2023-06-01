@@ -1,20 +1,39 @@
 
 
-const express = require("express");
+const express = require('express');
 const app = express();
+const ProductManager = require('./productManager');
 
-const productManager = require("./src/productManager");
-const  fs = requiere("fs");
+const productManager = new ProductManager('./productos.json');
 
-class productManager{
-    constructor(){
-        if(fs.existsSync("./src/productos.json")){
-            this.products = JSON.parse(
-                fs.readFileSync("./src/productos.json","utf-8")
-            );
-        }else{
-            this.products=[];
-        }
+// Endpoint para obtener todos los productos
+app.get('/products', async (req, res) => {
+    try {
+        const products = await productManager.getAllProducts();
+        res.json(products);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error al obtener los productos');
     }
-}
-module.exports = productManager;
+});
+
+// Endpoint para obtener un producto por ID
+app.get('/products/:id', async (req, res) => {
+    const productId = req.params.id;
+    try {
+        const product = await productManager.getProductById(productId);
+        if (typeof product === 'string') {
+            res.status(404).send(product);
+        } else {
+            res.json(product);
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(`Error al obtener el producto con ID: ${productId}`);
+    }
+});
+
+// Iniciar el servidor
+app.listen(3000, () => {
+    console.log('Servidor iniciado en el puerto 3000');
+});
