@@ -6,6 +6,21 @@ const ProductManager = require('./productManager');
 
 const productManager = new ProductManager('./productos.json');
 
+
+app.get('/', (req, res) => {
+    if (req.query.limit) {
+        let prod_array = []
+        let i = 1
+        while (i <= parseInt(req.query.limit)) {
+            prod_array.push(cart.getProductById(i))
+            i++
+        }
+        res.json(prod_array)
+    } else {
+        res.json(cart.getProducts())
+    }
+})
+
 // Endpoint para obtener todos los productos
 app.get('/products', async (req, res) => {
     try {
