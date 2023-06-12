@@ -1,46 +1,27 @@
 
 
-const express = require('express');
-const app = express();
-const ProductManager = require('./productManager');
+const express = require('express')
 
-const productManager = new ProductManager('./productos.json');
+const app = express()
+const PORT = 3000
 
+const productsRouter = require('../routers/products.router.js')
+const cartRouter = require('../routers/carts.router.js')
 
-// Endpoint para obtener todos los productos
-app.get('/products', async (req, res) => {
-    try {
-        if (req.query.limit) {
-            const products = await productManager.getProductsWithLimit(parseInt(req.query.limit))
-            res.json(products);
-        } else {
-            const products = await productManager.getAllProducts();
-            res.json(products);
-        }
-        
-    } catch (error) {
-        console.log(error);
-        res.status(500).send('Error al obtener los productos');
-    }
-});
+/* MULTER */
+//const filesRouter = require('../routers/files.router.js')
 
-// Endpoint para obtener un producto por ID
-app.get('/products/:id', async (req, res) => {
-    const productId = req.params.id;
-    try {
-        const product = await productManager.getProductById(productId);
-        if (typeof product === 'string') {
-            res.status(404).send(product);
-        } else {
-            res.json(product);
-        }
-    } catch (error) {
-        console.log(error);
-        res.status(500).send(`Error al obtener el producto con ID: ${productId}`);
-    }
-});
+//Middlewares
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
-// Iniciar el servidor
-app.listen(3000, () => {
-    console.log('Servidor iniciado en el puerto 3000');
-});
+//Routes
+app.use(productsRouter)
+app.use(cartRouter)
+
+/* MULTER */
+//app.use(filesRouter)
+
+app.listen(PORT, (req,res) => {
+    console.log("Server running on  port ",PORT)
+})
