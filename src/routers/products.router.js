@@ -1,18 +1,39 @@
 const { Router } = require('express')
 const router = Router()
 
-const productManager = require("./classes/ProductManager.js")
-const Product = require("../classes/Product.js")
+const productManager = require("../../classes/ProductManager.js")
+const Product = require("../../classes/Product.js")
 const prManager = new productManager("../products.json")
 
+
 //Retorna todos los productos
-router.get('/api/products', (req, res) => {
+router.get('/products', (req, res) => {
+    if (req.query.limit) {
+        res.render('home', {
+            products: prManager.products.slice(0, parseInt(req.query.limit)),
+            style: "style.css"
+        })
+    } else {
+        res.render('home', {
+            products: prManager.getProducts(),
+            style: "style.css"
+        })
+    }
+})
+
+router.get('/realTimeProducts', (req, res) => {
+    res.render('realTimeProducts', {
+        style: "style.css"
+    })
+})
+
+/* router.get('/api/products', (req, res) => {
     if (req.query.limit) {
         res.json(prManager.products.slice(0, parseInt(req.query.limit)))
     } else {
         res.json(prManager.getProducts())
     }
-})
+}) */
 
 //Retorna un producto
 router.get('/api/products/:pid', (req, res) => {
@@ -41,6 +62,12 @@ router.put('/api/products/:pid', (req, res) => {
 //Elimina un producto
 router.delete('/api/products/:pid', (req, res) => {
     prManager.deleteProductById(req.params.pid)
+})
+
+//WEBSOCKETS
+
+router.get('/api/realtimeproducts', (req, res) => {
+
 })
 
 module.exports = router;

@@ -8,7 +8,6 @@ class CartManager {
 
         this.readFS().then((res) => {
             this.carts = res
-            console.log(this.carts)
         }).catch((err) => {
         })
 

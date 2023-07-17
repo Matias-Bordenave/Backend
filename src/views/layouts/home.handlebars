@@ -1,0 +1,21 @@
+<div class="container">
+    <ul>
+        {{#each products }}
+        <li class="row m-5">
+            <div class="card">
+                <div class="card-details">
+                    <p class="text-title">{{this.title}}</p>
+                    <p class="text-body"> - Description: {{this.description}}</p>
+                    <p class="text-body"> - Code: {{this.code}}</p>
+                    <p class="text-body"> - Stock: {{this.stock}}</p>
+                    <p class="text-body"> - Category: {{this.category}}</p>
+                </div>
+                <button class="card-button"> $ {{this.price}}</button>
+            </div>
+        </li>
+
+        {{/each}}
+    </ul>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
