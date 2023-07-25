@@ -6,7 +6,8 @@ class ProductManager {
 
     constructor(path) {
         this.products = []
-        this.path = path_pkg.resolve(__dirname, path);
+        this.path = path_pkg.resolve(__dirname, "../"+path);
+
 
         this.readFS().then((res) => {
             this.products = res
@@ -62,6 +63,17 @@ class ProductManager {
     //Retorna un producto 
     getProductById = (id) => {
         let res = this.products.filter((item) => item.id == id);
+
+        if (res.length == 0) {
+            return "404 NOT FOUND";
+        } else {
+            return res[0];
+        }
+    };
+
+    //Retorna un producto 
+    getProductByCode = (code) => {
+        let res = this.products.filter((item) => item.code == code);
 
         if (res.length == 0) {
             return "404 NOT FOUND";

@@ -4,7 +4,7 @@ const path_pkg = require('path')
 class CartManager {
     constructor(path) {
         this.carts = []
-        this.path = path_pkg.resolve(__dirname, path);
+        this.path = path_pkg.resolve(__dirname, "../"+path);
 
         this.readFS().then((res) => {
             this.carts = res
@@ -50,6 +50,10 @@ class CartManager {
     //Retorna un carrito
     getCartById(id) {
         return this.carts.find((x) => x.id == id)
+    }
+
+    getCartByName(name) {
+        return this.carts.find((x) => x.name == name)
     }
 
     //Agrega un product id a un carrito

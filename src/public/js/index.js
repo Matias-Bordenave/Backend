@@ -1,5 +1,7 @@
 const socket = io()
 
+socket.emit("prod-activate", "")
+
 socket.emit("req-products", "pido prods")
 
 socket.on("clear-np-screen", (data) => {
@@ -13,8 +15,9 @@ socket.on("clear-np-screen", (data) => {
     let btn = document.createElement("button")
     btn.setAttribute("class", "btn btn-primary")
     btn.innerText = "New Product"
-    btn.onclick = createProduct()
-
+    btn.onclick = () => {
+        createProduct()
+    }
     div_button.appendChild(btn)
 
     let div_products = document.getElementById("div-products")
@@ -27,6 +30,7 @@ socket.on("clear-np-screen", (data) => {
 })
 
 socket.on("res-products", (data) => {
+    console.log(data)
     data = data.products
     render(data)
 })

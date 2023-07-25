@@ -94,5 +94,16 @@
         "status": true,
         "stock": "234",
         "category": "catg"
+    },
+    {
+        "id": 9,
+        "title": "matias",
+        "description": "un prod",
+        "price": 1345,
+        "thumbnail": "",
+        "code": "asdfg56",
+        "status": true,
+        "stock": "23",
+        "category": "cat"
     }
 ]
