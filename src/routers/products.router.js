@@ -40,7 +40,7 @@ router.get('/products', async (req, res) => {
 
     console.log(products.docs)
 
-    res.render('home', {
+    res.render('products', {
         products: products.docs,
         style: "style.css"
     })

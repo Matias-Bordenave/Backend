@@ -2,7 +2,7 @@ const { Router } = require('express')
 
 const router = Router()
 
-router.get('/api/home',(req,res) => {
+router.get('/home',(req,res) => {
     res.render('home', {})
 })
 
