@@ -1,127 +1,46 @@
 
-const express = require('express')
-const handlebars = require('express-handlebars')
-const http = require('http')
-const { Server } = require('socket.io')
-const path = require('path')
-const db = require('./db.js')
-const cookieParser = require('cookie-parser')
 
-const productsRouter = require('./routers/products.router.js')
-const cartRouter = require('./routers/carts.router.js')
-const homeRouter = require('./routers/home.router.js')
-const chatRouter = require('./routers/chat.router.js')
-const loginRouter = require('./routers/login.router.js')
+const express = require('express');
+const app = express();
+const ProductManager = require('./productManager');
 
-//esto no va aca
-const { Router } = require('express')
-const router = Router()
-
-// Express and port
-const app = express()
-const PORT = process.env.PORT || 3001
-
-//Http Server 
-const server = http.createServer(app)
-
-//Socket
-const io = new Server(server)
+const productManager = new ProductManager('./productos.json');
 
 
-//public
-app.use(express.static(path.resolve(__dirname, "../src/public")))
-
-
-//Views
-app.engine('handlebars', handlebars.engine())
-app.set('views', path.resolve(__dirname, "../src/views"))
-app.set('view engine', 'handlebars')
-
-/* MULTER */
-//const filesRouter = require('../routers/files.router.js')
-
-//Middlewares
-app.use(cookieParser('coderSecret'))
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-
-//Routes
-app.use(productsRouter)
-app.use(cartRouter)
-app.use(homeRouter)
-app.use(chatRouter)
-app.use(loginRouter)
-
-/* MULTER */
-//app.use(filesRouter)
-
-//Web socket actions
-let messages = []
-prod_flag = false
-
-io.on('connection', (socket) => {
-
-    const ProductManager = require('./dao/fileSystem/ProductManager.js')
-    const prManager = new ProductManager("../products.json")
-
-
-    const productModel = require("./dao/models/products.model.js")
-
-    //Request Products
-    socket.on("req-products", (data) => {
-        productModel.find()
-        .then((products) => {
-            socket.emit("res-products", { products: products })
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
-    })
-
-    //Cancel New Product
-    socket.on("np-cancel", (data) => {
-        io.emit("clear-np-screen", {})
-        productModel.find()
-        .then((products) => {
-            socket.emit("res-products", { products: products })
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
+// Endpoint para obtener todos los productos
+app.get('/products', async (req, res) => {
+    try {
+        if (req.query.limit) {
+            const products = await productManager.getProductsWithLimit(parseInt(req.query.limit))
+            res.json(products);
+        } else {
+            const products = await productManager.getAllProducts();
+            res.json(products);
+        }
         
-    })
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error al obtener los productos');
+    }
+});
 
-    //Add a New Product
-    socket.on("add-product", (data) => {
-        //prManager.addProduct(data)
-        console.log(data)
-        let newprod = prManager.getProductByCode(data.code)
-        console.log(newprod)
-        //productModel.create(newprod)
+// Endpoint para obtener un producto por ID
+app.get('/products/:id', async (req, res) => {
+    const productId = req.params.id;
+    try {
+        const product = await productManager.getProductById(productId);
+        if (typeof product === 'string') {
+            res.status(404).send(product);
+        } else {
+            res.json(product);
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(`Error al obtener el producto con ID: ${productId}`);
+    }
+});
 
-        socket.emit("clear-np-screen", {})
-        productModel.find()
-        .then((products) => {
-            io.sockets.emit("res-products", { products: products })
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
-        
-    })
-
-    socket.on("new-message", (data) => {
-
-        const messageModel = require("./dao/models/message.model.js")
-
-        messages.push(data)
-        messageModel.create({ user: data.author, message: data.text, date: new Date() })
-        io.sockets.emit("message-all", messages)
-    })
-})
-
-db.connect()
-
-server.listen(PORT, (req, res) => {
-    console.log("Server running on  port ", PORT)
-})
+// Iniciar el servidor
+app.listen(3000, () => {
+    console.log('Servidor iniciado en el puerto 3000');
+});
