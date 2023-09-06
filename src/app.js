@@ -1,6 +1,9 @@
 
+
 //Dependencies
 const express = require('express')
+
+
 const handlebars = require('express-handlebars')
 const http = require('http')
 const { Server } = require('socket.io')
@@ -12,19 +15,22 @@ const MongoStore = require("connect-mongo")
 const passport = require("passport")
 const { initializePassport } = require("./config/passport/passport")
 
+
+require('dotenv').config({ path: path.resolve(__dirname, "./.env") })
+const { Command } = require('commander')
+
 //DB config
 const db = require('./db.js')
 
 //Routers
-const productsRouter = require('./routers/products.router.js')
-const cartRouter = require('./routers/carts.router.js')
-const homeRouter = require('./routers/home.router.js')
-const chatRouter = require('./routers/chat.router.js')
-const loginRouter = require('./routers/auth.router.js')
+const productsRouter = require('./routing/products.router.js')
+const cartRouter = require('./routing/carts.router.js')
+const homeRouter = require('./routing/home.router.js')
+const chatRouter = require('./routing/chat.router.js')
+const loginRouter = require('./routing/auth.router.js')
 
 // Express and port
 const app = express()
-const PORT = process.env.PORT || 3000
 
 //Http Server 
 const server = http.createServer(app)
@@ -54,7 +60,7 @@ app.use(cookieParser('coderSecret'))
 //Session
 app.use(session({
     store: MongoStore.create({
-        mongoUrl: "mongodb+srv://matibordenave:bordenavepass@codercluster.tb0mecc.mongodb.net/" + DB_NAME
+        mongoUrl: "mongodb+srv://matibordenave:bordenavepass@codercluster.tb0mecc.mongodb.net/"
     }),
     secret: "secretCoder",
     resave: true,
@@ -144,8 +150,26 @@ io.on('connection', (socket) => {
     })
 })
 
+
+const program = new Command()
+program
+    .option('-d', 'Variable para hacer debug', false)
+    .option('-p <port>', 'Server Port', 8080)
+    .option('-m <mode>', 'Ambiente de trabajo', 'produccion')
+    .requiredOption('-u <user>', 'User', 'No se declaro el usuario')
+program.parse()
+
+//console.log(program.opts())
+
+
 db.connect()
 
-server.listen(PORT, (req, res) => {
-    console.log("Server running on  port ", PORT)
+/* process.on('exit', (x) => {
+    console.log('Adios')
+})
+
+process.exit() */
+
+server.listen(process.env.PORT, (req, res) => {
+    console.log("Server running on  port ", process.env.PORT)
 })

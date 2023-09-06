@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken")
 
 const { createHash, isValidPassword } = require("../utils/bcrypt")
 
-const userModel = require('../dao/models/user.model.js')
+const userModel = require('../dao/models/users.model.js')
 
 function authAdmin(req, res, next) {
 
@@ -21,7 +21,11 @@ router.get('/auth/login', (req, res) => {
     res.render("login", {})
 })
 
-router.post('/auth/login', passport.authenticate("login", { failureRedirect: "/auth/failedlogin" }), async (req, res) => {
+/* router.post('/auth/login', passport.authenticate("login", { failureRedirect: "/auth/failedlogin" }), async (req, res) => { */
+
+/* JWT */
+
+router.post('/auth/login', async (req, res) => {
 
     userModel.findOne({ email: req.body.email }).then((user) => {
 
@@ -32,10 +36,13 @@ router.post('/auth/login', passport.authenticate("login", { failureRedirect: "/a
             req.session.name = user.name
             req.session.rol = user.rol
 
-            let token = jwt.sign(JSON.stringify(user), 'mysecretcoderjwt', {})
+            let token = jwt.sign(JSON.stringify(user), 'mysecretcoderjwt')
 
             console.log("bearer " + token)
-
+            res.cookie('jwtCookie', token, {
+                maxAge: 60 * 60 * 100,
+                httpOnly: true
+            })
             res.redirect('/home')
         } else {
             res.send("Incorrect password")
@@ -77,7 +84,12 @@ router.get("/auth/failedlogin", (req, res) => {
     res.send("Failed login")
 })
 
-router.post("/auth/register", passport.authenticate('register', { failureRedirect: "/auth/failedregister" }), (req, res) => {
+/* router.post("/auth/register", passport.authenticate('register', { failureRedirect: "/auth/failedregister" }), (req, res) => { */
+
+/* JWT */
+
+router.post("/auth/register", (req, res) => {
+
     res.redirect("/auth/login")
 })
 
@@ -91,7 +103,7 @@ router.get("/users", authAdmin, (req, res) => {
     })
 })
 
-router.get("/auth/github", passport.authenticate("auth-github", { failureRedirect: "/failedlogin", scope: ['user:email'] }), (req, res) => {
+/* router.get("/auth/github", passport.authenticate("auth-github", { failureRedirect: "/failedlogin", scope: ['user:email'] }), (req, res) => {
 
 })
 
@@ -108,6 +120,6 @@ router.get("/auth/github/callback", passport.authenticate("auth-github", { failu
 
 router.get("/", (req, res) => {
 
-})
+}) */
 
 module.exports = router;
