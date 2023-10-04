@@ -40,12 +40,3 @@ const createProductService = (title = "", description = "", price = "", thumbnai
     let newProduct = new Product(title, description, price, thumbnail, code, status, stock, category)
     productModel.create(newProduct)
 }
-
-
-
-module.exports = {
-    getProductDBIdService,
-    getProductsService,
-    getProductByIdService,
-    createProductService
-}

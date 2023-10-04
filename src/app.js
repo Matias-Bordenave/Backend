@@ -1,7 +1,7 @@
 
 
 //Dependencies
-const express = require('express')
+/* const express = require('express')
 
 
 const handlebars = require('express-handlebars')
@@ -13,89 +13,92 @@ const session = require("express-session")
 const FileStore = require("session-file-store")(session)
 const MongoStore = require("connect-mongo")
 const passport = require("passport")
-const { initializePassport } = require("./config/passport/passport")
+const { initializePassport } = require("./config/passport/passport") */
 
 
-require('dotenv').config({ path: path.resolve(__dirname, "./.env") })
-const { Command } = require('commander')
+
+/* require('dotenv').config({path: path.resolve(__dirname,"./.env")})
+const { Command } = require('commander') */
 
 //DB config
-const db = require('./db.js')
+/* const db = require('./db.js') */
 
 //Routers
-const productsRouter = require('./routing/products.router.js')
+/* const productsRouter = require('./routing/products.router.js')
 const cartRouter = require('./routing/carts.router.js')
 const homeRouter = require('./routing/home.router.js')
 const chatRouter = require('./routing/chat.router.js')
 const loginRouter = require('./routing/auth.router.js')
-
+const mailRouter = require('./routing/mail.router')
+ */
 // Express and port
-const app = express()
+/* const app = express() */
 
-//Http Server 
-const server = http.createServer(app)
-
+//Http Server
+/* const server = http.createServer(app)
+ */
 //Socket
-const io = new Server(server)
+/* const io = new Server(server) */
 
 
 
 //public
-app.use(express.static(path.resolve(__dirname, "../src/public")))
+/* app.use(express.static(path.resolve(__dirname, "../src/public"))) */
 
 
 //Views
-app.engine('handlebars', handlebars.engine())
+/* app.engine('handlebars', handlebars.engine())
 app.set('views', path.resolve(__dirname, "../src/views"))
 app.set('view engine', 'handlebars')
-
+ */
 /* MULTER */
 //const filesRouter = require('../routers/files.router.js')
 
 //Middlewares
 
 //Cookies
-app.use(cookieParser('coderSecret'))
+/* app.use(cookieParser('coderSecret')) */
 
 //Session
-app.use(session({
+/* app.use(session({
     store: MongoStore.create({
-        mongoUrl: "mongodb+srv://matibordenave:bordenavepass@codercluster.tb0mecc.mongodb.net/"
+        mongoUrl: "mongodb+srv://ianbifano:ecommercepass@ecommerce-cluster.bzmyj9n.mongodb.net/ecommerce"
     }),
     secret: "secretCoder",
     resave: true,
     saveUninitialized: true
-}))
-
+})) */
+/*
 app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true })) */
 
 //Passport
-initializePassport()
+/* initializePassport()
 app.use(passport.initialize())
-app.use(passport.session())
+app.use(passport.session()) */
 
 //Routes
-app.use(productsRouter)
+/* app.use(productsRouter)
 app.use(cartRouter)
 app.use(homeRouter)
 app.use(chatRouter)
 app.use(loginRouter)
-
+app.use(mailRouter)
+ */
 /* MULTER */
 //app.use(filesRouter)
 
 //Web socket actions
-let messages = []
+/* let messages = []
 prod_flag = false
 
 io.on('connection', (socket) => {
 
-    const ProductManager = require('./dao/fileSystem/ProductManager.js')
+    const ProductManager = require('./models/dao/memory/ProductManager.js')
     const prManager = new ProductManager("../products.json")
 
 
-    const productModel = require("./dao/models/products.model.js")
+    const productModel = require("./models/products.schema.js")
 
     //Request Products
     socket.on("req-products", (data) => {
@@ -142,7 +145,7 @@ io.on('connection', (socket) => {
 
     socket.on("new-message", (data) => {
 
-        const messageModel = require("./dao/models/message.model.js")
+        const messageModel = require("./models/dao/models/message.model.js")
 
         messages.push(data)
         messageModel.create({ user: data.author, message: data.text, date: new Date() })
@@ -162,7 +165,7 @@ program.parse()
 //console.log(program.opts())
 
 
-db.connect()
+db.connect() */
 
 /* process.on('exit', (x) => {
     console.log('Adios')
@@ -170,6 +173,7 @@ db.connect()
 
 process.exit() */
 
-server.listen(process.env.PORT, (req, res) => {
+/* server.listen(process.env.PORT, (req, res) => {
     console.log("Server running on  port ", process.env.PORT)
 })
+ */

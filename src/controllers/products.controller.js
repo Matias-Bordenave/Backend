@@ -1,63 +1,60 @@
 
 
-const {
-    getProductsService,
-    getProductByIdService,
-    createProductService } = require('../services/products.service')
+const { errorResponse, successResponse } = require("../utils/utils")
 
+const ProductRepository = require("../models/repositories/products.repository")
 
+const productRepository = new ProductRepository()
 
-const getProductsController = async (req, res) => {
+class ProductController {
+    static getAllProducts = async (req, res, next) => {
 
-    res.cookie("Cookie", 'Informacion de la Cookie', { signed: true })
+        let data = []
 
-    let data = []
+        if (!req.query.category) {
+            req.query.category = ""
+        }
 
-    if (!req.query.category) {
-        req.query.category = ""
-    }
+        if (!req.query.limit) {
+            req.query.limit = "2"
+        }
 
-    if (!req.query.limit) {
-        req.query.limit = "2"
-    }
+        if (!req.query.page) {
+            req.query.page = "1"
+        }
 
-    if (!req.query.page) {
-        req.query.page = "1"
-    }
-
-    if (req.query.sort) {
-        if (req.query.sort == "asc") {
-            req.query.sort = "1"
-        } else if (req.query.sort == "desc") {
+        if (req.query.sort) {
+            if (req.query.sort == "asc") {
+                req.query.sort = "1"
+            } else if (req.query.sort == "desc") {
+                req.query.sort = "-1"
+            }
+        } else {
             req.query.sort = "-1"
         }
-    } else {
-        req.query.sort = "-1"
+        data = await productRepository.getAllProducts(req.query.category, req.query.limit, req.query.page, req.query.price, req.query.sort)
+
+        const response = successResponse(data.docs)
+        res.status(200).json(response)
     }
 
-    data = await getProductsService(req.query.category, req.query.limit, req.query.page, req.query.price, req.query.sort)
+    static getProductById = async (req, res, next) => {
+        let data = await productRepository.getProductById(req.params.pid)
+        const response = successResponse(data)
+        res.status(200).json(response)
+    }
 
-    console.log(data.docs)
+    static saveProduct = async (req, res, next) => {
+        const payload = req.body
+        try {
+            const newProduct = await productRepository.saveProduct(payload)
 
-    res.send(data.docs)
-    /* res.render('products', {
-        products: [{ title: "prod1" }, { title: "prod2" }],
-        style: "style.css"
-    }) */
+            const response = successResponse(newProduct)
+            res.status(200).json(response)
+        } catch (err) {
+            next(err)
+        }
+    }
 }
 
-const getProductByIdController = async (req, res) => {
-    let data = await getProductByIdService(req.params.pid)
-    res.send(data)
-}
-
-const createProductController = async (req, res) => {
-    let data = await createProductService(req.body.title, req.body.description, req.body.price, req.body.thumbnail, req.body.code, req.body.status, req.body.stock, req.body.category)
-    return data
-}
-
-module.exports = {
-    getProductsController,
-    getProductByIdController,
-    createProductController
-}
+module.exports = ProductController
