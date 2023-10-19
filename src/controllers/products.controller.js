@@ -52,6 +52,7 @@ class ProductController {
             const response = successResponse(newProduct)
             res.status(200).json(response)
         } catch (err) {
+            req.logger.error(err)
             next(err)
         }
     }

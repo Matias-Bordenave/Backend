@@ -10,6 +10,7 @@ class UserController {
             const response = successResponse(users)
             res.status(200).json(response)
         } catch (err) {
+            req.logger.error(err)
             next(err)
         }
     }
@@ -23,6 +24,7 @@ class UserController {
             const response = successResponse(newUser)
             res.status(200).json(response)
         } catch (err) {
+            req.logger.error(err)
             next(err)
         }
     }
@@ -33,6 +35,7 @@ class UserController {
             const response = successResponse(user)
             res.status(200).json(response)
         } catch (err) {
+            req.logger.error(err)
             next(err)
         }
     }
@@ -52,6 +55,7 @@ class UserController {
                     res.redirect("/api/carts/newCartToUser/" + req.params.uid)
                 }
             } catch (err) {
+                req.logger.error(err)
                 next(err)
             }
         }
@@ -63,14 +67,10 @@ class UserController {
             const user = await userRepository.setCart(req.params.uid, req.params.cid)
             res.redirect("/api/users/" + user._id.toString() + "/cart")
         } catch (err) {
+            req.logger.error(err)
             next(err)
         }
     }
 }
 
 module.exports = UserController
-
-
-
-
-

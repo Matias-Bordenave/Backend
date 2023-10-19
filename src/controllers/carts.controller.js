@@ -10,6 +10,7 @@ class CartController {
             const response = successResponse(carts)
             res.status(200).json(response)
         } catch (err) {
+            req.logger.error(err)
             next(err)
         }
     }
@@ -20,6 +21,7 @@ class CartController {
             const response = successResponse(cart)
             res.status(200).json(response)
         } catch (err) {
+            req.logger.error(err)
             next(err)
         }
     }
@@ -37,6 +39,7 @@ class CartController {
             const response = successResponse(newCart)
             res.status(200).json(response)
         } catch (err) {
+            req.logger.error(err)
             next(err)
         }
     }
@@ -51,6 +54,7 @@ class CartController {
 
             res.redirect("/api/users/addCart/" + req.params.uid + "/" + newCart._id.toString())
         } catch (err) {
+            req.logger.error(err)
             next(err)
         }
     }
@@ -66,6 +70,7 @@ class CartController {
             const response = successResponse(data)
             res.status(200).json(response)
         } catch (err) {
+            req.logger.error(err)
             next(err)
         }
     }
@@ -76,6 +81,7 @@ class CartController {
             const response = successResponse(cart)
             res.status(200).json(response)
         } catch (err) {
+            req.logger.error(err)
             next(err)
         }
     }

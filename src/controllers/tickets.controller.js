@@ -1,58 +1,31 @@
 const { errorResponse, successResponse } = require("../utils/utils")
+const TicketRepository = require("../models/repositories/tickets.repository")
 
-const ProductRepository = require("../models/repositories/products.repository")
+const ticketRepository = new TicketRepository()
 
-const productRepository = new ProductRepository()
-
-class ProductController {
-    static getAllProducts = async (req, res, next) => {
-
-        let data = []
-
-        if (!req.query.category) {
-            req.query.category = ""
-        }
-
-        if (!req.query.limit) {
-            req.query.limit = "2"
-        }
-
-        if (!req.query.page) {
-            req.query.page = "1"
-        }
-
-        if (req.query.sort) {
-            if (req.query.sort == "asc") {
-                req.query.sort = "1"
-            } else if (req.query.sort == "desc") {
-                req.query.sort = "-1"
-            }
-        } else {
-            req.query.sort = "-1"
-        }
-        data = await productRepository.getAllProducts(req.query.category, req.query.limit, req.query.page, req.query.price, req.query.sort)
-
-        const response = successResponse(data.docs)
-        res.status(200).json(response)
-    }
-
-    static getProductById = async (req, res, next) => {
-        let data = await productRepository.getProductById(req.params.pid)
-        const response = successResponse(data)
-        res.status(200).json(response)
-    }
-
-    static saveProduct = async (req, res, next) => {
-        const payload = req.body
+class TicketController {
+    static getAllTickets = async (req, res, next) => {
         try {
-            const newProduct = await productRepository.saveProduct(payload)
-
-            const response = successResponse(newProduct)
+            const tickets = await ticketRepository.getAllTickets()
+            const response = successResponse(tickets)
             res.status(200).json(response)
         } catch (err) {
+            req.logger.error(err)
+            next(err)
+        }
+    }
+
+    static saveTicket = async (req, res, next) => {
+        try {
+            const payload = req.body
+            const newTicket = await ticketRepository.saveTicket(payload)
+            const response = successResponse(newTicket)
+            res.status(200).json(response)
+        } catch (err) {
+            req.logger.error(err)
             next(err)
         }
     }
 }
 
-module.exports = ProductController
+module.exports = TicketController

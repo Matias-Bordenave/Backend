@@ -15,4 +15,12 @@ router.get("/mockusers", (req, res) => {
     res.json({ success: true, payload: users })
 })
 
+router.get("/loggerTest", (req, res) => {
+    req.logger.error("Test error")
+    req.logger.warning("Test warning")
+    req.logger.info("Test info")
+    req.logger.debug("Test http")
+    req.logger.fatal("Test Fatal")
+})
+
 module.exports = router

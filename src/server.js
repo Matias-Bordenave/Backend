@@ -8,6 +8,7 @@ const session = require("express-session")
 const MongoStore = require("connect-mongo")
 const cookieParser = require('cookie-parser')
 
+const addLogger = require("./utils/logger")
 const errMiddleware = require("./middlewares/errors.middleware")
 
 const { PORT } = CONFIG
@@ -42,7 +43,7 @@ app.engine('handlebars', handlebars.engine())
 app.set('views', path.resolve(__dirname, "../src/views"))
 app.set('view engine', 'handlebars')
 
-
+app.use(addLogger)
 app.use('/api', errMiddleware, appRouter)
 
 app.listen(PORT, () => {
