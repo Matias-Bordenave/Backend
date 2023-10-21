@@ -1,12 +1,16 @@
 const { errorResponse, successResponse } = require("../utils/utils")
-const CartRepository = require("../models/repositories/carts.repository")
+const CartService = require("../models/services/carts.service")
+const ProductService = require("../models/services/products.service")
+const TicketService = require('../models/services/tickets.service')
 
-const cartRepository = new CartRepository()
+const cartService = new CartService()
+const productService = new ProductService()
+const ticketService = new TicketService()
 
 class CartController {
-    static getAllCarts = async (req, res, next) => {
+    static getAll = async (req, res, next) => {
         try {
-            const carts = await cartRepository.getAllCarts()
+            const carts = await cartService.getAll()
             const response = successResponse(carts)
             res.status(200).json(response)
         } catch (err) {
@@ -15,9 +19,9 @@ class CartController {
         }
     }
 
-    static getCartById = async (req, res, next) => {
+    static getById = async (req, res, next) => {
         try {
-            const cart = await cartRepository.getCartById(req.params.cid)
+            const cart = await cartService.getById(req.params.cid)
             const response = successResponse(cart)
             res.status(200).json(response)
         } catch (err) {
@@ -26,7 +30,7 @@ class CartController {
         }
     }
 
-    static saveCart = async (req, res, next) => {
+    static save = async (req, res, next) => {
         const payload = req.body
         const { name, products } = payload
         try {
@@ -34,7 +38,7 @@ class CartController {
                 throw new Error("Bad request")
             }
 
-            const newCart = await cartRepository.saveCart(payload)
+            const newCart = await cartService.save(payload)
 
             const response = successResponse(newCart)
             res.status(200).json(response)
@@ -44,29 +48,48 @@ class CartController {
         }
     }
 
-    static newCartToUser = async (req, res, next) => {
+    static addProduct = async (req, res, next) => {
         try {
-            const payload = req
-            payload.name = req.params.uid
-            payload.products = []
 
-            const newCart = await cartRepository.saveCart(payload)
+            if (req.session.rol == "premium") {
+                let product = await productService.getById(req.params.pid)
 
-            res.redirect("/api/users/addCart/" + req.params.uid + "/" + newCart._id.toString())
+                if (product.owner == req.session.user.email) {
+                    res.send("No puedes agregar tu propio producto al carrito")
+                }
+            }
+            if (!req.query.quantity) {
+                req.query.quantity = "1"
+            }
+            let cart = await cartService.getById(req.params.cid)
+
+            let check = cart.products.filter((prod) => prod.product.toString() == req.params.pid)
+
+            if (check.length > 0) {
+                let index = cart.products.indexOf(check[0])
+                cart.products[index] = { product: req.params.pid, quantity: parseInt(req.query.quantity) }
+            } else {
+                cart.products.push({ product: req.params.pid, quantity: parseInt(req.query.quantity) })
+            }
+
+            let data = await cartService.updateById(req.params.cid, cart)
+            const response = successResponse(data)
+            res.status(200).json(response)
         } catch (err) {
             req.logger.error(err)
             next(err)
         }
     }
 
-    static addProduct = async (req, res, next) => {
-
+    static deleteProduct = async (req, res, next) => {
         try {
-            if (!req.query.quantity) {
-                req.query.quantity = "1"
-            }
+            let cart = await cartService.getById(req.params.cid)
 
-            let data = await cartRepository.addProduct(req.params.cid, req.params.pid, req.query.quantity)
+            let new_arr = cart.products.filter((prod) => prod.product.toString() != req.params.pid)
+
+            cart.products = new_arr
+
+            let data = await cartService.updateById(req.params.cid, cart)
             const response = successResponse(data)
             res.status(200).json(response)
         } catch (err) {
@@ -77,9 +100,43 @@ class CartController {
 
     static confirmPurchase = async (req, res, next) => {
         try {
-            let cart = await cartRepository.confirmPurchase(req.params.cid)
-            const response = successResponse(cart)
-            res.status(200).json(response)
+            let cart = await cartService.getById(req.params.cid)
+            let aux_c = cart
+            let amount = 0
+
+            await cart.products.map(async (item) => {
+                let product = await productService.getById(item.product.toString())
+
+                if (product.stock > item.quantity) {
+                    console.log("se vendieron " + item.quantity + " unidades de " + product.title + ".")
+
+                    let aux_p = product
+                    aux_p.stock = product.stock - item.quantity
+
+                    await productService.updateById(item.product.toString(), aux_p)
+
+                    amount = amount + product.price
+                    console.log("new amount " + amount)
+                    let new_arr = aux_c.products.filter((prod) => prod.product.toString() != item.product.toString())
+                    aux_c.products = new_arr
+                    await cartService.updateById(req.params.cid, aux_c)
+                }
+            })
+
+            if (amount > 0) {
+                let new_ticket = {
+                    amount: amount,
+                    purchaser: req.session.user.email
+                }
+
+                let data = await ticketService.save(new_ticket)
+                const response = successResponse(data)
+                res.status(200).json(response)
+            } else {
+                const response = successResponse(cart)
+                res.status(200).json(response)
+            }
+
         } catch (err) {
             req.logger.error(err)
             next(err)

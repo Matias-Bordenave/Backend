@@ -15,30 +15,16 @@ class CartsMongoDao {
         return newCart
     }
 
-    getCartById = async (id) => {
+    getById = async (id) => {
         return await cartModel.findOne({ _id: id }).lean()
-    }
-
-    addProduct = async (cartId, productId, quantity) => {
-        let cart = await this.getCartById(cartId)
-        let check = cart.products.filter((product) => product.product.toString() == productId)
-
-        if (check.length > 0) {
-            let index = cart.products.indexOf(check[0])
-            cart.products[index] = { product: productId, quantity: parseInt(quantity) }
-        } else {
-            cart.products.push({ product: productId, quantity: parseInt(quantity) })
-        }
-        await cartModel.updateOne({ _id: cartId }, cart).then((res) => {
-        }).catch((err) => {
-            return false
-        })
-
-        return cart
     }
 
     updateById = async (cartId, newCart) => {
         return await cartModel.updateOne({ _id: cartId }, newCart)
+    }
+
+    deleteById = async (cartId) => {
+        return await cartModel.deleteOne({ _id: cartId })
     }
 }
 

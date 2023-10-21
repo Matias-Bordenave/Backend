@@ -10,8 +10,12 @@ class UsersMongoDao {
         return await userModel.find().lean()
     }
 
-    getUserById = async (id) => {
-        return await userModel.findOne({ id: parseInt(id) }).lean()
+    getById = async (id) => {
+        return await userModel.findOne({ _id: id }).lean()
+    }
+
+    getByEmail = async (email) => {
+        return await userModel.findOne({ email: email }).lean()
     }
 
     save = async (payload) => {
@@ -19,27 +23,13 @@ class UsersMongoDao {
         return newUser
     }
 
-    getUserById = async (id) => {
-        return await userModel.findOne({ _id: id }).lean()
-    }
-
     getCart = async (userId) => {
         let user = await userModel.findOne({ _id: userId }).lean()
         return user.carts
     }
 
-    setCart = async (userId, cartId) => {
-        let user = await this.getUserById(userId)
-
-        user.carts.push({ cart: cartId })
-
-        await userModel.updateOne({ _id: userId }, user).then((res) => {
-
-        }).catch((err) => {
-            return err
-        })
-
-        return user
+    updateById = async (userId, user) => {
+        return await userModel.updateOne({ _id: userId }, user)
     }
 }
 

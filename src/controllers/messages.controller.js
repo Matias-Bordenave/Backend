@@ -1,12 +1,12 @@
 const { errorResponse, successResponse } = require("../utils/utils")
-const MessageRepository = require("../models/repositories/messages.repository")
+const MessageService = require("../models/services/messages.service")
 
-const messageRepository = new MessageRepository()
+const messageService = new MessageService()
 
 class MessageController {
     static getAllMessages = async (req, res, next) => {
         try {
-            const messages = await messageRepository.getAllMessages()
+            const messages = await messageService.getAllMessages()
             const response = successResponse(messages)
             res.status(200).json(response)
         } catch (err) {
@@ -18,7 +18,7 @@ class MessageController {
         const payload = req.body
         try {
 
-            const newMessage = await messageRepository.saveMessage(payload)
+            const newMessage = await messageService.saveMessage(payload)
 
             const response = successResponse(newMessage)
             res.status(200).json(response)

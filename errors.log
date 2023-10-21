@@ -3,3 +3,40 @@ error: Test error
 fatal: Test Fatal
 error: Test error
 fatal: Test Fatal
+error: undefined
+error: undefined
+error: undefined {"kind":"embedded","path":"products","reason":{"kind":"ObjectId","message":"Cast to ObjectId failed for value \"64b5a5b5a3398e7b8ba013d7&quantity=7\" (type string) at path \"product\" because of \"BSONError\"","name":"CastError","path":"product","reason":{},"stringValue":"\"64b5a5b5a3398e7b8ba013d7&quantity=7\"","value":"64b5a5b5a3398e7b8ba013d7&quantity=7","valueType":"string"},"stringValue":"\"{ product: '64b5a5b5a3398e7b8ba013d7&quantity=7', quantity: 1 }\"","value":{"product":"64b5a5b5a3398e7b8ba013d7&quantity=7","quantity":1},"valueType":"Object"}
+error: undefined
+error: undefined
+error: undefined {"kind":"embedded","path":"products","reason":{"kind":"ObjectId","message":"Cast to ObjectId failed for value \"64b5a5b5a3398e7b8ba013d7&quantity=7\" (type string) at path \"product\" because of \"BSONError\"","name":"CastError","path":"product","reason":{},"stringValue":"\"64b5a5b5a3398e7b8ba013d7&quantity=7\"","value":"64b5a5b5a3398e7b8ba013d7&quantity=7","valueType":"string"},"stringValue":"\"{ product: '64b5a5b5a3398e7b8ba013d7&quantity=7', quantity: 1 }\"","value":{"product":"64b5a5b5a3398e7b8ba013d7&quantity=7","quantity":1},"valueType":"Object"}
+error: undefined {"kind":"embedded","path":"products","reason":{"kind":"ObjectId","message":"Cast to ObjectId failed for value \"64b5a5b5a3398e7b8ba013d6&quantity=77\" (type string) at path \"product\" because of \"BSONError\"","name":"CastError","path":"product","reason":{},"stringValue":"\"64b5a5b5a3398e7b8ba013d6&quantity=77\"","value":"64b5a5b5a3398e7b8ba013d6&quantity=77","valueType":"string"},"stringValue":"\"{ product: '64b5a5b5a3398e7b8ba013d6&quantity=77', quantity: 1 }\"","value":{"product":"64b5a5b5a3398e7b8ba013d6&quantity=77","quantity":1},"valueType":"Object"}
+error: undefined
+error: undefined
+error: undefined {"kind":"embedded","path":"products","reason":{"kind":"ObjectId","message":"Cast to ObjectId failed for value \"64b5a5b5a3398e7b8ba013d7&quantity=7\" (type string) at path \"product\" because of \"BSONError\"","name":"CastError","path":"product","reason":{},"stringValue":"\"64b5a5b5a3398e7b8ba013d7&quantity=7\"","value":"64b5a5b5a3398e7b8ba013d7&quantity=7","valueType":"string"},"stringValue":"\"{ product: '64b5a5b5a3398e7b8ba013d7&quantity=7', quantity: 1 }\"","value":{"product":"64b5a5b5a3398e7b8ba013d7&quantity=7","quantity":1},"valueType":"Object"}
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"64\"","value":64,"valueType":"number"}
+error: undefined
+error: undefined
+error: undefined
+error: undefined {"kind":"embedded","path":"carts","reason":{},"stringValue":"\"652dc2c7fb1853d916dd3558\"","value":"652dc2c7fb1853d916dd3558","valueType":"string"}
+error: undefined
+error: undefined {"kind":"embedded","path":"carts","reason":{},"stringValue":"\"652dc3de3ab255bb76e6f62a\"","value":"652dc3de3ab255bb76e6f62a","valueType":"string"}
+error: undefined {"kind":"embedded","path":"carts","reason":{},"stringValue":"\"652dc413042673136f95ba5f\"","value":"652dc413042673136f95ba5f","valueType":"string"}
+error: undefined {"kind":"embedded","path":"carts","reason":{},"stringValue":"\"652dc45afdaee25b53676839\"","value":"652dc45afdaee25b53676839","valueType":"string"}
+error: undefined
+error: undefined
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"undefined\"","value":"undefined","valueType":"string"}
+error: undefined
+error: undefined
+error: undefined {"code":"ERR_HTTP_HEADERS_SENT"}

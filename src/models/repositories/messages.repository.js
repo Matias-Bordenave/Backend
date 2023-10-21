@@ -1,9 +1,7 @@
-const { getDAOS } = require("../factories/messages.daos.factory")
 const SaveMessageDTO = require("../dto/messages.dto")
-const messagesDao = getDAOS()
 
 class MessageRepository {
-    constructor() {
+    constructor(messagesDao) {
         this.dao = messagesDao
     }
 

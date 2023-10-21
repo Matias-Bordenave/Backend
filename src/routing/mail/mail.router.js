@@ -1,6 +1,8 @@
 const { Router } = require('express')
 const router = Router()
 
+const CONFIG = require("../../config/config")
+
 const passport = require("passport")
 const nodemailer = require('nodemailer')
 
@@ -17,14 +19,16 @@ const transport = nodemailer.createTransport({
     }
 })
 
-router.get('/mail', isAuthorized, async (req, res) => {
+router.get('/restore-password', async (req, res) => {
     let result = await transport.sendMail({
         from: 'My Project <matibordenave@gmail.com>',
         to: 'matibordenave@gmail.com',
-        subject: 'Correo de prueba',
+        subject: 'Restore Password',
         html: `
         <div>
-            <h1> Coder App </h1>
+            <h1> Restore Password </h1>
+            <p>Podras reestablecer tu contraseña ingresando al link a continuacion </p>
+            <a href="http://localhost:${CONFIG.PORT}/api/auth/restore-password"> Restore password </a>
         </div>
         `,
         attachments: []

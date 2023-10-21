@@ -1,12 +1,12 @@
 const { errorResponse, successResponse } = require("../utils/utils")
-const TicketRepository = require("../models/repositories/tickets.repository")
+const TicketService = require("../models/services/tickets.service")
 
-const ticketRepository = new TicketRepository()
+const ticketService = new TicketService()
 
 class TicketController {
-    static getAllTickets = async (req, res, next) => {
+    static getAll = async (req, res, next) => {
         try {
-            const tickets = await ticketRepository.getAllTickets()
+            const tickets = await ticketService.getAll()
             const response = successResponse(tickets)
             res.status(200).json(response)
         } catch (err) {
@@ -15,10 +15,10 @@ class TicketController {
         }
     }
 
-    static saveTicket = async (req, res, next) => {
+    static save = async (req, res, next) => {
         try {
             const payload = req.body
-            const newTicket = await ticketRepository.saveTicket(payload)
+            const newTicket = await ticketService.save(payload)
             const response = successResponse(newTicket)
             res.status(200).json(response)
         } catch (err) {

@@ -1,27 +1,29 @@
-const { getDAOS } = require("../factories/products.daos.factory")
 const SaveProductDTO = require("../dto/products.dto")
-const productsDao = getDAOS()
 
 class ProductRepository {
-    constructor() {
+    constructor(productsDao) {
         this.dao = productsDao
     }
 
-    getAllProducts = async (category = "", limit = "", page = "", price = "", sort = "") => {
+    getAll = async (category = "", limit = "", page = "", price = "", sort = "") => {
         return await this.dao.getAll(category, limit, page, price, sort)
     }
 
-    getProductById = async (id) => {
-        return await this.dao.getProductById(id)
+    getById = async (id) => {
+        return await this.dao.getById(id)
     }
 
-    saveProduct = async (payload) => {
+    save = async (payload) => {
         const productPayload = new SaveProductDTO(payload)
         return await this.dao.save(productPayload)
     }
 
     updateById = async (productId, product) => {
         return await this.dao.updateById(productId, product)
+    }
+
+    deleteById = async (productId) => {
+        return await this.dao.deleteById(productId)
     }
 }
 

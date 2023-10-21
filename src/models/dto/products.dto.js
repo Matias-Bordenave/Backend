@@ -8,6 +8,7 @@ class SaveProductDTO {
         this.stock = payload.stock
         this.status = true
         this.category = payload.category
+        this.owner = payload.owner
     }
 }
 

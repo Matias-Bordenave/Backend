@@ -17,7 +17,8 @@ const productSchema = new mongoose.Schema({
     },
     stock: { type: Number },
     status: { type: Boolean },
-    category: { type: String }
+    category: { type: String },
+    owner: { type: String }
 })
 
 productSchema.plugin(mongoosePaginate)

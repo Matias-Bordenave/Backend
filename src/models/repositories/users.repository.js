@@ -1,31 +1,33 @@
-const { getDAOS } = require("../factories/users.daos.factory")
 const SaveCartDTO = require("../dto/users.dto")
-const usersDao = getDAOS()
 
 class UserRepository {
-    constructor() {
+    constructor(usersDao) {
         this.dao = usersDao
     }
 
-    getAllUsers = async () => {
+    getAll = async () => {
         return await this.dao.getAll()
     }
 
-    saveUser = async (payload) => {
+    save = async (payload) => {
         const userPayload = new SaveCartDTO(payload)
         return await this.dao.save(userPayload)
     }
 
-    getUserById = async (id) => {
-        return await this.dao.getUserById(id)
+    getById = async (id) => {
+        return await this.dao.getById(id)
+    }
+
+    getByEmail = async (email) => {
+        return await this.dao.getByEmail(email)
     }
 
     getCart = async (userId) => {
         return await this.dao.getCart(userId)
     }
 
-    addCart = async (userId, cartId) => {
-        return await this.dao.setCart(userId, cartId)
+    updateById = async (userId, user) => {
+        return await this.dao.updateById(userId, user)
     }
 }
 

@@ -1,17 +1,15 @@
-const { getDAOS } = require("../factories/tickets.daos.factory")
 const SaveTicketDTO = require("../dto/tickets.dto")
-const ticketsDao = getDAOS()
 
 class TicketRepository {
-    constructor() {
+    constructor(ticketsDao) {
         this.dao = ticketsDao
     }
 
-    getAllTickets = async () => {
+    getAll = async () => {
         return await this.dao.getAll()
     }
 
-    saveTicket = async (payload) => {
+    save = async (payload) => {
         const ticketPayload = new SaveTicketDTO(payload)
         return await this.dao.save(ticketPayload)
     }

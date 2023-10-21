@@ -14,7 +14,7 @@ class ProductsMongoDao {
         }
     }
 
-    getProductById = async (id) => {
+    getById = async (id) => {
         return await productModel.findOne({ _id: id }).lean()
     }
 
@@ -25,6 +25,10 @@ class ProductsMongoDao {
 
     updateById = async (productId, product) => {
         return await productModel.updateOne({ _id: productId }, product)
+    }
+
+    deleteById = async (productId) => {
+        return await productModel.deleteOne({ _id: productId })
     }
 }
 

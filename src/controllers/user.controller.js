@@ -1,12 +1,14 @@
 const { errorResponse, successResponse } = require("../utils/utils")
-const UserRepository = require("../models/repositories/users.repository")
+const UserService = require("../models/services/users.service")
+const CartService = require("../models/services/carts.service")
 
-const userRepository = new UserRepository()
+const userService = new UserService()
+const cartService = new CartService()
 
 class UserController {
-    static getAllUsers = async (req, res, next) => {
+    static getAll = async (req, res, next) => {
         try {
-            const users = await userRepository.getAllUsers()
+            const users = await userService.getAll()
             const response = successResponse(users)
             res.status(200).json(response)
         } catch (err) {
@@ -15,11 +17,11 @@ class UserController {
         }
     }
 
-    static saveUser = async (req, res, next) => {
+    static save = async (req, res, next) => {
         const payload = req.body
         try {
 
-            const newUser = await userRepository.saveUser(payload)
+            const newUser = await userService.save(payload)
 
             const response = successResponse(newUser)
             res.status(200).json(response)
@@ -29,9 +31,9 @@ class UserController {
         }
     }
 
-    static getUserById = async (req, res, next) => {
+    static getById = async (req, res, next) => {
         try {
-            const user = await userRepository.getUserById(req.params.uid)
+            const user = await userService.getById(req.params.uid)
             const response = successResponse(user)
             res.status(200).json(response)
         } catch (err) {
@@ -47,28 +49,29 @@ class UserController {
         } else {
             try {
 
-                const cart = await userRepository.getCart(req.params.uid)
+                const carts = await userService.getCart(req.params.uid)
 
-                try {
-                    res.redirect("/api/carts/" + cart[0].cart.toString())
-                } catch (err) {
-                    res.redirect("/api/carts/newCartToUser/" + req.params.uid)
+                if (carts.length > 0) {
+                    res.redirect("/api/carts/" + carts[0].cart.toString())
+                } else {
+                    let new_cart = {
+                        name: req.params.uid,
+                        products: []
+                    }
+
+                    const cart = await cartService.save(new_cart)
+                    let cartId = cart._id.toString()
+
+                    const user = await userService.getById(req.params.uid)
+                    user.carts.push({ cart: cartId })
+
+                    await userService.updateById(req.params.uid, user)
+                    res.redirect("/api/carts/" + cartId)
                 }
             } catch (err) {
                 req.logger.error(err)
                 next(err)
             }
-        }
-    }
-
-
-    static setCart = async (req, res, next) => {
-        try {
-            const user = await userRepository.setCart(req.params.uid, req.params.cid)
-            res.redirect("/api/users/" + user._id.toString() + "/cart")
-        } catch (err) {
-            req.logger.error(err)
-            next(err)
         }
     }
 }

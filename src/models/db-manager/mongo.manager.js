@@ -7,7 +7,7 @@ class MongoManager {
     static #instance
 
     constructor() {
-        mongoose.connect(CONFIG.MONGO_URI).then(
+        mongoose.connect(CONFIG.mongo.URI).then(
             () => {
                 console.log("DB connected")
             }).catch((err) => {

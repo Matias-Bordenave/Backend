@@ -8,6 +8,7 @@ const authRouter = require("./auth/auth.router")
 const homeRouter = require("./home/home.router")
 const ticketsRouter = require("./tickets/tickets.router")
 const testRouter = require("../../test/test.router")
+const mailRouter = require("./mail/mail.router")
 
 const router = Router()
 
@@ -18,6 +19,7 @@ router.use("/messages", messagesRouter)
 router.use("/auth", authRouter)
 router.use("/home", homeRouter)
 router.use("/tickets", ticketsRouter)
+router.use("/mail", mailRouter)
 router.use("/test", testRouter)
 
 module.exports = router
