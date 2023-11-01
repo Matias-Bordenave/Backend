@@ -1,0 +1,42 @@
+paths: 
+  /api/users:
+    get:
+      summary: Obtiene todos los usuarios
+      tags:
+        - Users
+      responses: 
+        "200":
+          description: Status OK
+    post:
+      summary: Obtiene la informacion de nuestros usuarios
+      tags:
+        - Users
+      responses: 
+        "200":
+          description: Status OK
+  /api/users/{userID}:
+    parameters:
+        - in: /api/users/
+          name: userID  
+          required: true
+          description: Identificador unico de usuario.
+    get: 
+      summary: Obtiene un usuario
+      tags: 
+        - Users
+      responses:
+        "200":
+          description: Status OK
+  /api/get/users/cart/{userID}:
+    parameters:
+        - in: /api/users/
+          name: userID  
+          required: true
+          description: Identificador unico de usuario.
+    get:
+      summary: Obtiene el carrito del usuario.
+      tags:
+        - Users
+      responses:
+        "200":
+          description: Status OK

@@ -20,6 +20,8 @@ class ProductsMongoDao {
 
     save = async (payload) => {
         const newProduct = await productModel.create(payload)
+
+        newProduct = await productModel.findOne({}).sort({ _id: -1 })
         return newProduct
     }
 

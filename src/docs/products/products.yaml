@@ -1,0 +1,43 @@
+paths:
+  /api/products:
+    get:
+      summary: Obtiene todos los productos
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Status OK
+    post:
+      summary: Guarda un nuevo producto
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Status OK
+  /api/products/{productID}:
+    parameters:
+        - in: /api/products/
+          name: productID
+          required: true
+          description: Identificador unico del producto
+    get:
+      summary: Obtiene un producto
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Status OK
+    put:
+      summary: Actualiza un producto
+      tags: 
+        - Products
+      responses:
+        "200":
+          description: Status OK
+    delete:
+      summary: Elimina un producto
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Status OK

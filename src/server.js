@@ -11,6 +11,10 @@ const { initializePassport } = require("./config/passport/passport")
 const addLogger = require("./utils/logger")
 const errMiddleware = require("./middlewares/errors.middleware")
 
+
+const swaggerJSDoc = require('swagger-jsdoc')
+const swaggerUIExpress = require("swagger-ui-express")
+
 const cluster = require('cluster')
 const { cpus } = require("os")
 
@@ -50,6 +54,28 @@ if (cluster.isPrimary) {
 
     app.use(addLogger)
     app.use('/api', errMiddleware, appRouter)
+
+    const swaggerOptions = {
+        definition: {
+            openapi: '3.0.1',
+            info: {
+                title: 'Doc MyProject',
+                description: "Projecto backend Coderhouse"
+                ,
+                contact: {
+                    name: "soporte",
+                    url: 'https://www.example.com.ar',
+                    email: 'matibordenave@gmail.com'
+                }
+            }
+        },
+        apis: [`${__dirname}/docs/**/*.yaml`]
+    }
+
+    const specs = swaggerJSDoc(swaggerOptions)
+
+    app.use('/apidocs', swaggerUIExpress.serve, swaggerUIExpress.setup(specs))
+
 
 
 

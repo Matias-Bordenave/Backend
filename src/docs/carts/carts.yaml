@@ -1,0 +1,57 @@
+paths:
+  /api/carts:
+    get:
+      summary: Obtiene todos los carritos
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Status OK
+    post:
+      summary: Guarda un nuevo carrito
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Status OK
+  /api/carts/{cartID}:
+    parameters:
+        - in: /api/carts/
+          name: cartID
+          required: true
+          description: Identificador unico del cart
+    get:
+      summary: Obtiene un cart
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Status OK
+    put:
+      summary: Actualiza un cart
+      tags: 
+        - Carts
+      responses:
+        "200":
+          description: Status OK
+    delete:
+      summary: Elimina un cart
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Status OK
+  /api/carts/purchase/{cartID}:
+    parameters:
+        - in: /api/carts/purchase/
+          name: cartID
+          required: true
+          description: Identificador unico del cart
+    post:
+      summary: Confirma la compra de un carrito
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Status OK
+    

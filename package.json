@@ -4,12 +4,14 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "nodemon src/server.js"
+        "start": "nodemon src/server.js",
+        "test": "mocha test/supertest/supertest.test.js"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "assert": "^2.1.0",
         "bcrypt": "^5.1.0",
         "bcryptjs": "^2.4.3",
         "commander": "^11.0.0",
@@ -38,6 +40,9 @@
         "winston": "^3.10.0"
     },
     "devDependencies": {
-        "@faker-js/faker": "^8.1.0"
+        "@faker-js/faker": "^8.1.0",
+        "chai": "^4.3.10",
+        "mocha": "^10.2.0",
+        "supertest": "^6.3.3"
     }
 }
